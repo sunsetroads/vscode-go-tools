@@ -1,5 +1,4 @@
 # vscode-go-tools
-Solving vscode installation go-tools failed
 
 使用vscode进行go开发时需要安装一些插件，但安装go-tools时会报下面的错
 ```
