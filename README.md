@@ -78,13 +78,13 @@ go install github.com/cweill/gotests/gotests
 ### go mod tips
 用惯了npm、pip、cocoapods，初学go时看到它五花八门的包管理，着实头疼了一番，可能官方也看不下去了，在go 1.11的版本推出了go mod，学了下之后，马上放弃了其他包管理工具
 
-**使用go mod后还需要GOPATH吗？**
+##### 使用go mod后还需要GOPATH吗?
 我们不需要再去关注GOPATH了。但go mod其实还是依赖GOPATH的，go mod 中安装package位置在 GOPATH/pkg/mod/下，在GOPATH目录外执行代码会根据go.mod文件去GOPATH/pkg/mod下查找对应的包
 
-**为什么上面的解决办法go1.12和1.13执行go install位置不同？**
+##### 为什么上面的解决办法go1.12和1.13执行go install位置不同?
 非go mod目录下执行go install命令会去GOPAHT/src下找这些包, go mod管理的目录下执行go install会去GOPATH/pkg/mod目录下查找对应的包。
 
-**go install和go build的区别？**
+##### go install和go build的区别?
 go install其实就是先去对应目录go build，如果是main包，把build生成的可执行文件再移动到GOPATH/bin下。
 
 [go标准命令详解](http://wiki.jikexueyuan.com/project/go-command-tutorial/0.0.html)
