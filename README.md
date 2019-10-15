@@ -20,8 +20,7 @@ Installing github.com/derekparker/delve/cmd/dlv SUCCEEDED
 #### 简单的解决办法
 [clone 此项目](https://github.com/znvy/vscode-go-tools.git)，把bin中的文件放入你的GOPATH/bin中(仅适用于mac环境),之后重启vscode即可
 
-#### ~~旧解决办法～～
-
+#### 旧解决办法
 看报错信息会发现这些包依赖golang.org上的一些包，而golang.org在国内是无法访问的，所以安装失败了。打开GOPATH的src目录会发现这些包是有下载下来的，所以只要把那些无法下载的包手动拷到相应位置就可以了。
 
 在$GOPATH/src/golang.org/x下git clone https://github.com/golang/tools.git, 然后打开终端，进入非go mod管理的目录执行下面的命令
@@ -80,7 +79,7 @@ go install github.com/cweill/gotests/gotests
 #### 使用go mod后还需要GOPATH吗?
 我们不需要再去关注GOPATH了。但go mod其实还是依赖GOPATH的，go mod 中安装package位置在 GOPATH/pkg/mod/下，在GOPATH目录外执行代码会根据go.mod文件去GOPATH/pkg/mod下查找对应的包
 
-#### 为什么上面的解决办法go1.12和1.13执行go install位置不同?
+#### 为什么上面的解决办法执行go install位置不同?
 非go mod目录下执行go install命令会去GOPAHT/src下找这些包, go mod管理的目录下执行go install会去GOPATH/pkg/mod目录下查找对应的包。
 
 #### go install是什么?
@@ -88,4 +87,4 @@ go install其实就是先去对应目录go build，如果是main包，把build�
 
 [go标准命令详解](http://wiki.jikexueyuan.com/project/go-command-tutorial/0.0.html)
 
-go mod的使用方法我就不复制粘贴了，网上有太多的教程了。记得使用**go mod help**查看相关命令
+go mod的使用方法网上有很多教程了，可以使用**go mod help**查看相关命令
