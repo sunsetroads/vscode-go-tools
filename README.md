@@ -65,7 +65,7 @@ go install github.com/cweill/gotests/gotests
 #### 最新的解决办法
 最近把go版本升级到1.13后，打开vscode后提示相关的一些插件也需要升级，点击升级后毫无疑外的报错了，和之前1.12一样，还是提示找不到golang.org上的包。
 
-但查看GOPATH目录后发现src目录下并没有新增这些插件包，这些包被放在了GOPATH/pkg/mod目录下，这时需要在$GOPATH/pkg/mod/golang.org/x下git clone https://github.com/golang/tools.git, 然后进入一个go mod管理的目录执行上门那些命令。
+但查看GOPATH目录后发现src目录下并没有新增这些插件包，这些包被放在了GOPATH/pkg/mod目录下，这时需要在$GOPATH/pkg/mod/golang.org/x下git clone https://github.com/golang/tools.git, 然后进入一个go mod管理的目录执行上面那些命令。
 ```
 go install github.com/ramya-rao-a/go-outline
 ...
