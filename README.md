@@ -1,4 +1,4 @@
-### vscode-go-tools 安装失败的解决办法
+## VSCode 中 Go Tools 安装失败的解决办法
 VSCode 实在是一个开发利器，通过安装插件可以轻松进行 Js Python等多种语言的开发，之前安装 go 的一些插件时总提示失败，最初参照网上的一些方法解决了，但最近把 go 版本升到了 1.13。VSCode 提示插件需要升级，这一升级不要紧，又安装失败了，错误和之前的还不一样，经过排查日志最后总算解决了，记录一下解决办法。
 
 在 VSCode 中使用快捷键 Cmd + Shift + P，输入 go 会显示 Go：Install/Update Tools，点击安装 Tools，VSCode 的输出中会显示下面的错误
@@ -66,7 +66,7 @@ go install github.com/cweill/gotests/gotests
 #### 解决办法3
 最近把 go 版本升级到 1.13 后，打开 VSCode 后提示相关的一些插件也需要升级，点击升级后又报错了，和之前 1.12 一样，还是提示找不到 golang.org 上的包。
 
-但查看 GOPATH 目录后发现 src 目录下并没有新增这些插件包，仔细查看后发现这些 Tools 的包被放在了 GOPATH/pkg/mod 目录下，用过 go mod 的应该知道，这个目录是用来放 go mod 安装的包，也就是说 VSCode 改用 go mod 来管理第三方包了。了解了问题所在，解决就比较简单了。只需要在 GOPATH/pkg/mod/golang.org/x 下git clone https://github.com/golang/Tools.git, 然后进入一个go mod管理的目录执行上面那些命令。
+但查看 GOPATH 目录后发现 src 目录下并没有新增这些插件包，仔细查看后发现这些 Tools 的包被放在了 GOPATH/pkg/mod 目录下，用过 go mod 的应该知道，这个目录是用来放 go mod 安装的包，也就是说 VSCode 改用 go mod 来管理第三方包了。了解了问题所在，解决就比较简单了。只需要在 GOPATH/pkg/mod/golang.org/x 下 git clone https://github.com/golang/Tools.git, 然后进入一个 go mod 管理的目录执行上面那些命令。
 ```
 go install github.com/ramya-rao-a/go-outline
 ...
