@@ -1,13 +1,14 @@
-# vscode-go-tools
+### vscode-go-tools 安装失败的解决办法
+VSCode 实在是一个开发利器，通过安装插件可以轻松进行 Js Python等多种语言的开发，之前安装 go 的一些插件时总提示失败，最初参照网上的一些方法解决了，但最近把 go 版本升到了 1.13。VSCode 提示插件需要升级，这一升级不要紧，又安装失败了，错误和之前的还不一样，经过排查日志最后总算解决了，记录一下解决办法。
 
-使用vscode进行go开发时需要安装一些插件，但安装go-tools时会报下面的错
+在 VSCode 中使用快捷键 Cmd + Shift + P，输入 go 会显示 Go：Install/Update Tools，点击安装 Tools，VSCode 的输出中会显示下面的错误
 ```
 Installing github.com/nsf/gocode SUCCEEDED
 Installing github.com/uudashr/gopkgs/cmd/gopkgs SUCCEEDED
 Installing github.com/ramya-rao-a/go-outline FAILED
 Installing github.com/acroca/go-symbols FAILED
-Installing golang.org/x/tools/cmd/guru FAILED
-Installing golang.org/x/tools/cmd/gorename FAILED
+Installing golang.org/x/Tools/cmd/guru FAILED
+Installing golang.org/x/Tools/cmd/gorename FAILED
 Installing github.com/fatih/gomodifytags SUCCEEDED
 Installing github.com/haya14busa/goplay/cmd/goplay SUCCEEDED
 Installing github.com/josharian/impl FAILED
@@ -17,22 +18,22 @@ Installing github.com/golang/lint/golint FAILED
 Installing github.com/cweill/gotests/... FAILED
 Installing github.com/derekparker/delve/cmd/dlv SUCCEEDED
 ```
-#### 简单的解决办法
-[clone 此项目](https://github.com/znvy/vscode-go-tools.git)，把bin中的文件放入你的GOPATH/bin中(仅适用于mac环境),之后重启vscode即可
+#### 解决办法1
+[clone 此项目](https://github.com/znvy/VSCode-go-Tools.git)，把 bin 中的文件放入你的 GOPATH/bin 中，之后重启 VSCode 即可。
 
-#### 旧解决办法
-看报错信息会发现这些包依赖golang.org上的一些包，而golang.org在国内是无法访问的，所以安装失败了。打开GOPATH的src目录会发现这些包是有下载下来的，所以只要把那些无法下载的包手动拷到相应位置就可以了。
+#### 解决办法2
+看报错信息会发现这些包依赖 golang.org 上的一些包，而 golang.org 在国内是无法访问的，所以安装失败了。打开 GOPATH 的 src 目录会发现这些包是有下载下来的，所以只要把那些无法下载的包手动拷到相应位置就可以了。
 
-在$GOPATH/src/golang.org/x下git clone https://github.com/golang/tools.git, 然后打开终端，进入非go mod管理的目录执行下面的命令
+在 GOPATH/src/golang.org/x 下 git clone https://github.com/golang/Tools.git, 然后打开终端，执行下面的命令
 
 ```
 go install github.com/ramya-rao-a/go-outline
 
 go install github.com/acroca/go-symbols
 
-go install golang.org/x/tools/cmd/guru
+go install golang.org/x/Tools/cmd/guru
 
-go install golang.org/x/tools/cmd/gorename
+go install golang.org/x/Tools/cmd/gorename
 
 go install github.com/josharian/impl
 
@@ -48,9 +49,9 @@ go install github.com/ramya-rao-a/go-outline
 
 go install github.com/acroca/go-symbols
 
-go install golang.org/x/tools/cmd/guru
+go install golang.org/x/Tools/cmd/guru
 
-go install golang.org/x/tools/cmd/gorename
+go install golang.org/x/Tools/cmd/gorename
 
 go install github.com/josharian/impl
 
@@ -62,10 +63,10 @@ go install github.com/golang/lint/golint
 
 go install github.com/cweill/gotests/gotests
 ```
-#### 最新的解决办法
-最近把go版本升级到1.13后，打开vscode后提示相关的一些插件也需要升级，点击升级后毫无疑外的报错了，和之前1.12一样，还是提示找不到golang.org上的包。
+#### 解决办法3
+最近把 go 版本升级到 1.13 后，打开 VSCode 后提示相关的一些插件也需要升级，点击升级后又报错了，和之前 1.12 一样，还是提示找不到 golang.org 上的包。
 
-但查看GOPATH目录后发现src目录下并没有新增这些插件包，这些包被放在了GOPATH/pkg/mod目录下，这时需要在$GOPATH/pkg/mod/golang.org/x下git clone https://github.com/golang/tools.git, 然后进入一个go mod管理的目录执行上面那些命令。
+但查看 GOPATH 目录后发现 src 目录下并没有新增这些插件包，仔细查看后发现这些 Tools 的包被放在了 GOPATH/pkg/mod 目录下，用过 go mod 的应该知道，这个目录是用来放 go mod 安装的包，也就是说 VSCode 改用 go mod 来管理第三方包了。了解了问题所在，解决就比较简单了。只需要在 GOPATH/pkg/mod/golang.org/x 下git clone https://github.com/golang/Tools.git, 然后进入一个go mod管理的目录执行上面那些命令。
 ```
 go install github.com/ramya-rao-a/go-outline
 ...
@@ -73,18 +74,11 @@ go install github.com/ramya-rao-a/go-outline
 go install github.com/cweill/gotests/gotests
 ```
 
-### go mod tips
-用惯了npm、pip、cocoapods，初学go时看到它五花八门的包管理，着实头疼了一番，可能官方也看不下去了，在go 1.11的版本推出了go mod，学了下之后，马上放弃了其他包管理工具
+#### 使用 go mod 后还需要 GOPATH 吗?
+我们不需要再去关注 GOPATH了。但 go mod 其实还是依赖 GOPATH 的，go mod 中安装 package 位置在 GOPATH/pkg/mod/下，在 go mod 管理的目录执行代码会根据 go.mod 文件去 GOPATH/pkg/mod 下查找对应的包
 
-#### 使用go mod后还需要GOPATH吗?
-我们不需要再去关注GOPATH了。但go mod其实还是依赖GOPATH的，go mod 中安装package位置在 GOPATH/pkg/mod/下，在GOPATH目录外执行代码会根据go.mod文件去GOPATH/pkg/mod下查找对应的包
+#### go install 是什么?
+go install 其实就是先去对应目录 go build，如果是 main 包，把 build 生成的可执行文件再移动到 GOPATH/bin 下。
 
-#### 为什么上面的解决办法执行go install位置不同?
-非go mod目录下执行go install命令会去GOPAHT/src下找这些包, go mod管理的目录下执行go install会去GOPATH/pkg/mod目录下查找对应的包。
-
-#### go install是什么?
-go install其实就是先去对应目录go build，如果是main包，把build生成的可执行文件再移动到GOPATH/bin下。
-
-[go标准命令详解](http://wiki.jikexueyuan.com/project/go-command-tutorial/0.0.html)
-
-go mod的使用方法网上有很多教程了，可以使用**go mod help**查看相关命令
+#### 为什么上面的解决办法执行 go install 位置不同?
+非 go mod 目录下执行 go install 命令会去 GOPAHT/src 下找这些包，go mod 管理的目录下执行 go install 会去 GOPATH/pkg/mod 目录下查找对应的包。
